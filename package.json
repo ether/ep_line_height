@@ -1,0 +1,13 @@
+{
+  "description": "Change the line height",
+  "name": "ep_line_height",
+  "version": "0.0.1",
+  "author": {
+    "name": "John McLear",
+    "email": "john@mclear.co.uk"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
