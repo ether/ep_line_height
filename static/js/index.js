@@ -6,7 +6,7 @@ var lineHeightsClass = 'lineHeights';
 var cssFiles = ['ep_line-height/static/css/editor.css'];
 // All our lineHeights are block elements, so we just return them.
 
-var lineHeights = ['100%', '200%'];
+var lineHeights = ['Single', 'Double'];
 
 // Bind the event handler to the toolbar buttons
 var postAceInit = function(hook, context){
@@ -46,7 +46,9 @@ exports.aceCreateDomLine = function(name, context){
   if (tagIndex !== undefined && tagIndex >= 0){
     // console.log(tagIndex, lineHeightsType[1]);    
       
-    var tag = lineHeights[tagIndex];
+    var tag = lineHeights[tagIndex]; 
+    if(tag == "Single") tag = "100%";
+    if(tag == "Double") tag = "200%";
     var modifier = {
       extraOpenTags: '<span style="line-height: ' + tag + '">',
       extraCloseTags: '</span>',
