@@ -1,6 +1,6 @@
 var _ = require('ep_etherpad-lite/static/js/underscore');
 
-var heights = ['Single', 'Double'];
+var heights = ['1','1.5','2'];
 
 var collectContentPre = function(hook, context){
   var tname = context.tname;

@@ -6,7 +6,7 @@ var lineHeightsClass = 'lineHeights';
 var cssFiles = ['ep_line-height/static/css/editor.css'];
 // All our lineHeights are block elements, so we just return them.
 
-var lineHeights = ['Single', 'Double'];
+var lineHeights = [0, "1","2","3"];
 
 // Bind the event handler to the toolbar buttons
 var postAceInit = function(hook, context){
@@ -17,7 +17,7 @@ var postAceInit = function(hook, context){
     if(!_.isNaN(intValue)){
       context.ace.callWithAce(function(ace){
         ace.ace_doInsertlineHeights(intValue);
-      },'insertColor' , true);
+      },'insertLineHeight' , true);
       hs.val("dummy");
     }
   })
@@ -40,21 +40,21 @@ exports.aceCreateDomLine = function(name, context){
   var lineHeightsType = /(?:^| )lineHeights:([A-Za-z0-9]*)/.exec(cls);
 
   var tagIndex;
-  if (lineHeightsType) tagIndex = _.indexOf(lineHeights, lineHeightsType[1]);
+  if (lineHeightsType){
+    tagIndex = _.indexOf(lineHeights, lineHeightsType[1]);
+  }
 
       
   if (tagIndex !== undefined && tagIndex >= 0){
-    // console.log(tagIndex, lineHeightsType[1]);    
-      
     var tag = lineHeights[tagIndex]; 
-    if(tag == "Single") tag = "100%";
-    if(tag == "Double") tag = "200%";
+    if(tag == "1") tag = "100%";
+    if(tag == "2") tag = "150%";
+    if(tag == "3") tag = "200%";
     var modifier = {
       extraOpenTags: '<span style="line-height: ' + tag + '">',
       extraCloseTags: '</span>',
       cls: cls
     };
-    console.log(cls);
     return [modifier];
   }
   return [];
@@ -66,22 +66,20 @@ exports.aceCreateDomLine = function(name, context){
 // Passing a level >= 0 will set a lineHeights on the selected lines, level < 0 
 // will remove it
 function doInsertlineHeights(level){
-  var rep = this.rep,
-    documentAttributeManager = this.documentAttributeManager;
-  if (!(rep.selStart && rep.selEnd) || (level >= 0 && lineHeights[level] === undefined))
-  {
-    return;
-  }
+  var rep = this.rep;
+  var documentAttributeManager = this.documentAttributeManager;
+
+  if (!(rep.selStart && rep.selEnd) || (level >= 0 && lineHeights[level] === undefined)) return;
   
-    if(level >= 0){
-          documentAttributeManager.setAttributesOnRange(rep.selStart, rep.selEnd, [
-                ['lineHeights', lineHeights[level]]
-          ]);
-    }else{
-        documentAttributeManager.setAttributesOnRange(rep.selStart, rep.selEnd, [
-                    ['lineHeights', '']
-              ]);
-    }
+  if(level >= 0){
+    documentAttributeManager.setAttributesOnRange(rep.selStart, rep.selEnd, [
+      ['lineHeights', lineHeights[level]]
+    ]);
+  }else{
+    documentAttributeManager.setAttributesOnRange(rep.selStart, rep.selEnd, [
+      ['lineHeights', '']
+    ]);
+  }
 }
 
 
@@ -93,9 +91,6 @@ function aceInitialized(hook, context){
 
 
 // Export all hooks
-//exports.aceRegisterBlockElements = aceRegisterBlockElements;
 exports.aceInitialized = aceInitialized;
 exports.postAceInit = postAceInit;
-//exports.aceDomLineProcessLineAttributes = aceDomLineProcessLineAttributes;
 exports.aceAttribsToClasses = aceAttribsToClasses;
-//exports.aceEditorCSS = aceEditorCSS;
