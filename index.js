@@ -5,6 +5,12 @@ exports.eejsBlock_editbarMenuLeft = function (hook_name, args, cb) {
   return cb();
 }
 
+exports.eejsBlock_dd_format = function (hook_name, args, cb) {
+  args.content = args.content + eejs.require("ep_line_height/templates/fileMenu.ejs");
+  return cb();
+}
+
+
 function getInlineStyle(height) {
   return "line-height: "+height+";";
 }

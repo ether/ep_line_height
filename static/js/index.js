@@ -10,7 +10,7 @@ var lineHeights = [0, "1","2","3"];
 
 // Bind the event handler to the toolbar buttons
 var postAceInit = function(hook, context){
-  var hs = $('#height-selection');
+  var hs = $('.height-selection');
   hs.on('change', function(){
     var value = $(this).val();
     var intValue = parseInt(value,10);
@@ -21,6 +21,9 @@ var postAceInit = function(hook, context){
       hs.val("dummy");
     }
   })
+  $('.font_family').hover(function(){
+    $('.submenu > .height-selection').attr('size', 4);
+  });
 };
 
 

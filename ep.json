@@ -13,7 +13,8 @@
         "eejsBlock_editbarMenuLeft": "ep_line_height/index",
         "collectContentPre": "ep_line_height/static/js/shared",
         "collectContentPost": "ep_line_height/static/js/shared",
-        "getLineHTMLForExport": "ep_line_height/index"
+        "getLineHTMLForExport": "ep_line_height/index",
+        "eejsBlock_dd_format":"ep_line_height/index"
       }
     }
   ]
