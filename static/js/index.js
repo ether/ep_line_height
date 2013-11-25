@@ -21,8 +21,11 @@ var postAceInit = function(hook, context){
       hs.val("dummy");
     }
   })
-  $('.font_family').hover(function(){
+  $('.line-height-menu').hover(function(){
     $('.submenu > .height-selection').attr('size', 4);
+  });
+  $('.line-height').click(function(){
+    $('.line-height-select').toggle();
   });
 };
 
