@@ -1,15 +1,14 @@
 var _ = require('ep_etherpad-lite/static/js/underscore');
 
-var heights = ['1','1.5','2'];
+var heights = ['lineheight1','lineheight2','lineheight3'];
 
 var collectContentPre = function(hook, context){
   var tname = context.tname;
   var state = context.state;
   var lineAttributes = state.lineAttributes
   var tagIndex = _.indexOf(heights, tname);
-
   if(tagIndex >= 0){
-    lineAttributes['height'] = heights[tagIndex];
+    lineAttributes['lineHeight'] = heights[tagIndex];
   }
 };
 
@@ -20,7 +19,7 @@ var collectContentPost = function(hook, context){
   var tagIndex = _.indexOf(heights, tname);
 
   if(tagIndex >= 0){
-    delete lineAttributes['height'];
+    delete lineAttributes['lineHeight'];
   }
 };
 

@@ -2,7 +2,6 @@ var _, $, jQuery;
 
 var $ = require('ep_etherpad-lite/static/js/rjquery').$;
 var _ = require('ep_etherpad-lite/static/js/underscore');
-var lineHeightsClass = 'lineHeights';
 var cssFiles = ['ep_line-height/static/css/editor.css'];
 // All our lineHeights are block elements, so we just return them.
 
@@ -29,7 +28,12 @@ var postAceInit = function(hook, context){
   });
 };
 
-
+exports.aceGetFilterStack = function(name, context){
+  return [
+    context.linestylefilter.getRegexpFilter(
+      new RegExp("lineHeights", "g"), 'lineHeights')
+  ];
+}
 
 // Our lineHeights attribute will result in a heaading:h1... :h6 class
 function aceAttribsToClasses(hook, context){
@@ -40,26 +44,25 @@ function aceAttribsToClasses(hook, context){
 
 
 // Here we convert the class lineHeights:h1 into a tag
-exports.aceCreateDomLine = function(name, context){
+exports.aceDomLineProcessLineAttributes = function(name, context){
   var cls = context.cls;
   var domline = context.domline;
   var lineHeightsType = /(?:^| )lineHeights:([A-Za-z0-9]*)/.exec(cls);
-
   var tagIndex;
   if (lineHeightsType){
     tagIndex = _.indexOf(lineHeights, lineHeightsType[1]);
   }
 
-      
+  console.log(lineHeights);      
   if (tagIndex !== undefined && tagIndex >= 0){
     var tag = lineHeights[tagIndex]; 
-    if(tag == "1") tag = "100%";
-    if(tag == "2") tag = "150%";
-    if(tag == "3") tag = "200%";
+    if(tag == "1") var height = "130%";
+    if(tag == "2") var height = "195%";
+    if(tag == "3") var height = "260%";
     var modifier = {
-      extraOpenTags: '<span style="line-height: ' + tag + '">',
-      extraCloseTags: '</span>',
-      cls: cls
+      preHtml: '<lineheight'+ tag + ' style="line-height:'+height+'">',
+      postHtml: '</lineheight>',
+      processedMarker: true
     };
     return [modifier];
   }
@@ -72,20 +75,24 @@ exports.aceCreateDomLine = function(name, context){
 // Passing a level >= 0 will set a lineHeights on the selected lines, level < 0 
 // will remove it
 function doInsertlineHeights(level){
-  var rep = this.rep;
-  var documentAttributeManager = this.documentAttributeManager;
-
-  if (!(rep.selStart && rep.selEnd) || (level >= 0 && lineHeights[level] === undefined)) return;
-  
-  if(level >= 0){
-    documentAttributeManager.setAttributesOnRange(rep.selStart, rep.selEnd, [
-      ['lineHeights', lineHeights[level]]
-    ]);
-  }else{
-    documentAttributeManager.setAttributesOnRange(rep.selStart, rep.selEnd, [
-      ['lineHeights', '']
-    ]);
+  var rep = this.rep,
+    documentAttributeManager = this.documentAttributeManager;
+  if (!(rep.selStart && rep.selEnd) || (level >= 0 && lineHeights[level] === undefined))
+  {
+    return;
   }
+  
+  var firstLine, lastLine;
+  
+  firstLine = rep.selStart[0];
+  lastLine = Math.max(firstLine, rep.selEnd[0] - ((rep.selEnd[1] === 0) ? 1 : 0));
+  _(_.range(firstLine, lastLine + 1)).each(function(i){
+    if(level >= 0){
+      documentAttributeManager.setAttributeOnLine(i, 'lineHeights', lineHeights[level]);
+    }else{
+      documentAttributeManager.removeAttributeOnLine(i, 'lineHeights');
+    }
+  });
 }
 
 
@@ -100,3 +107,7 @@ function aceInitialized(hook, context){
 exports.aceInitialized = aceInitialized;
 exports.postAceInit = postAceInit;
 exports.aceAttribsToClasses = aceAttribsToClasses;
+
+exports.aceRegisterBlockElements = function(){
+  return ['lineheight1','lineheight2','lineheight3'];
+}
