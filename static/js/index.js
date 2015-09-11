@@ -52,8 +52,7 @@ exports.aceDomLineProcessLineAttributes = function(name, context){
   if (lineHeightsType){
     tagIndex = _.indexOf(lineHeights, lineHeightsType[1]);
   }
-
-  console.log(lineHeights);      
+    
   if (tagIndex !== undefined && tagIndex >= 0){
     var tag = lineHeights[tagIndex]; 
     if(tag == "1") var height = "130%";
