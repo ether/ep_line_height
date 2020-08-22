@@ -1,7 +1,7 @@
 {
   "description": "Change the line height",
   "name": "ep_line_height",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "author": {
     "name": "John McLear",
     "email": "john@mclear.co.uk"
