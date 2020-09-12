@@ -19,8 +19,12 @@ exports.getLineHTMLForExport = function (hook, context) {
   var header = _analyzeLine(context.attribLine, context.apool);
   if (header) {
     var inlineStyle = getInlineStyle(header);
-    return "<span style=\"" + inlineStyle + "\">" + context.text.substring(1) + "</span>";
+    if (context.lineContent[0] === '*') {
+      context.lineContent = context.lineContent.substring(1);
+    }
+    context.lineContent = "<span style=\"" + inlineStyle + "\">" + context.lineContent + "</span>";
   }
+  return true;
 }
 
 function _analyzeLine(alineAttrs, apool) {
@@ -29,7 +33,8 @@ function _analyzeLine(alineAttrs, apool) {
     var opIter = Changeset.opIterator(alineAttrs);
     if (opIter.hasNext()) {
       var op = opIter.next();
-      header = Changeset.opAttributeValue(op, 'heights', apool);
+	
+      header = Changeset.opAttributeValue(op, 'lineHeights', apool);
     }
   }
   return header;
